@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import Preview from './components/Preview';
+import PreviewHooks from './components/Preview_hooks';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const viewMap = [ <Preview />, <PreviewHooks />]
+
+class App extends Component {
+  state = {
+    showIndex: 0
+  }
+  componentDidMount () {
+    const mt = window.location.search.match(/showIndex=(\d)/)
+    if (mt) {
+      this.setState({
+        showIndex: +mt[1]
+      })
+    }
+  }
+  changeCor (showIndex) {
+    this.setState({
+      showIndex
+    })
+  }
+  render() {
+    return (
+      <div className="App">
+        <div className="route">
+          <span onClick={this.changeCor.bind(this, 0)}>点击切换到 图片放大预览/活肤动效</span>
+          <span onClick={this.changeCor.bind(this, 1)}>点击切换到 图片放大预览/活肤动效(react hooks)</span>
+        </div>
+        <hr/>
+        {
+          viewMap[this.state.showIndex]
+        }
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App
