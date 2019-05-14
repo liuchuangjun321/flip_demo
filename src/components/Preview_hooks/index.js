@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 
 // 标识预览的状态，1：显示，2：开始关闭，3：已关闭
 let previewVisibleStatus = 3;
@@ -34,7 +34,10 @@ function Preview () {
   const [previewStatus, setPreviewStatus] = useState(0);
   const [previewImgInfo, setPreviewImgInfo] = useState(null);
 
-  useEffect(() => {
+  // 这里必须使用useLayoutEffect而非useEffect，如果使用useEffect会导致页面抖动。
+  // 因为useLayoutEffect会在react完成DOM更新后马上同步调用的代码，会阻塞页面渲染。而useEffect是会在整个页面渲染完才会调用的代码。
+  // 在实际使用时如果想避免页面抖动（在useEffect里修改DOM很有可能出现）的话，可以把需要操作DOM的代码放在useLayoutEffect里。
+  useLayoutEffect(() => {
     updatePreviewStatus();
   })
 
